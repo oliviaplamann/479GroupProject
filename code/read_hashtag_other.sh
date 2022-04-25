@@ -4,7 +4,7 @@ n=$SLURM_ARRAY_TASK_ID
 
 for y in $(seq 0 1)
 do
-	for m in $(seq 1 3)
+	for m in $(seq 1 12)
 	do
 	if [[ ($m -lt 10) ]]
 	then 
