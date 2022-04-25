@@ -12,6 +12,6 @@ jobId2=$(sbatch --dependency=afterok:$jobId1 \
 		--array=0-23 \
                 --output="slurm_out_sentiment/slurm-%A_%a.out" \
        		--error="slurm_out_sentiment/slurm-%A_%a.err" \
-       		./read_sentiment_other.sh)
+       		./read_sentiment_2021.sh)
 
 jobId2=$(echo $jobId2 | sed 's/Submitted batch job //')
