@@ -19,4 +19,4 @@ You can clone this github repo by running "git clone https://github.com/oliviapl
 This folder contains all of our code.
 
 ## Graphcial Summaries and Results:
-### TO DO - folder that contains our graphs and results from t-tests
+This folder contains all of our graphs, statistical analysis, and results. 
