@@ -18,5 +18,5 @@ You can clone this github repo by running "git clone https://github.com/oliviapl
 ## Code:
 This folder contains all of our code.
 
-## Graphcial Summaries and Results:
+## Graphcial Summary Analysis:
 This folder contains all of our graphs, statistical analysis, and results. 
