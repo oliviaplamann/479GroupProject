@@ -1,5 +1,5 @@
 ---
-title: "Stat 479 Final Draft"
+title: "Stat 479 Final Visualizations"
 output:
   html_document:
     df_print: paged
