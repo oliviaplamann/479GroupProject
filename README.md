@@ -19,3 +19,6 @@ This folder contains all of our code.
 
 ## Graphcial Summary Analysis:
 This folder contains all of our graphs, statistical analysis, and results. 
+
+## Report:
+This folder contains our final report.
