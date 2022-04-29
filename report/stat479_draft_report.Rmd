@@ -1,0 +1,197 @@
+---
+title: "**Stat479 Rough Draft**"
+author: "Olivia Plamann, Grace Campbell, Supraja Battula, Justin Yang, Huailin Tang"
+date: "4/29/2022"
+output:
+  html_document:
+    toc: yes
+    toc_float:
+      collapsed: false
+      smooth_scroll: false
+  pdf_document:
+    toc: yes
+---
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      message=FALSE,
+                      warning=FALSE,
+                      cache = FALSE)
+library(ggplot2)
+library(png)
+```
+
+# **Introduction**
+
+- Social media platforms like Twitter have been an outlet for many individuals to express their thoughts and beliefs, especially during times of isolation such as the COVID-19 pandemic.  We are interested in visualizing and analyzing Tweet Sentiment and Hashtags throughout the pandemic, and more specifically how these trends relate to COVID case counts and restriction periods. We answered our question by parallelizing our computations using the High Performance Computing Cluster (HPC) using shell scripting and R code.  In this code, we ran linear and logistic regressions on COVID-19 case counts and restrictions, produced various time series graphs to focus on Tweet Sentiment, and used bar plots to visualize the most common hashtags in 2022. 
+
+
+# **Data Collection**
+
+- We obtained our data from a GitHub repository containing an ongoing collection of Tweets associated with the COVID-19 pandemic that began in January of 2022. The almost 3 billion Tweets were collected using Twitter’s trending topics and selected keywords from each month, day, and hour of the year, and we performed statistical analysis on the Hashtag and Sentiment files, which were about 50 GB in size. We utilized parallel computing in the HPC to read in and merge all the Hashtag and Sentiment files. We then were able to mutate the files by adding date and count columns for each sentiment to get the files into a suitable format for our statistical analysis.
+- We also obtained Covid case count data from the World Health Organization Covid-19 Case Dashboard, as well as restriction status data from government mandates in the U.S. and European countries. We chose to use restriction data from the U.S. and Europe due to the tweets being concentrated in those two locations. 
+
+&nbsp;
+
+**Sentiment and Covid Data**
+```{r, echo=FALSE}
+data <- read.csv("sentimentData.csv", header = TRUE)
+head(data)
+```
+&nbsp;
+
+# **Statistical Analysis**
+
+- For the statistical computations, we first ran a linear regression model to investigate the relationship between count of negative sentiment Tweets and the count of COVID-19 cases from January 2020 to March 2022. It resulted in a p-value of 0.783 signifying no relationship between the two variables. 
+
+&nbsp;
+
+### Negative Tweets vs Number of Covid Cases Linear Regression
+
+```{r, echo=FALSE}
+lm_reg <- lm(data$Count ~ data$Cases)
+summary(lm_reg)
+```
+
+&nbsp;
+
+- However, we then graphed these variables to visualize their relationship, or lack thereof, and found that a subset of the months in this time period seemed to show similar trends.
+
+&nbsp;
+
+**Count of Covid Cases vs Negative Tweets**
+```{r, echo=FALSE}
+ggplot(data, aes(x = Month, y = Count)) +
+  geom_line(aes(x = Month, y = Count, colour = "Negative Tweets")) +
+  geom_line(aes(x = Month, y = Cases, colour = "Cases")) 
+```
+
+- Based on these findings, we then subsetted the data according to the visualized pattern of the graph and ran the linear regression again. The new linear regression produced a p-value of 0.0101, signifying a strong relationship between the number of negative Tweets and the number of Covid cases during the time period of November 2020 to December 2021.
+
+&nbsp;
+
+### Subset Analysis: Negative Tweets vs Number of Covid Cases Linear Regression
+```{r, echo=FALSE}
+month_sub <- data$Month[11:24]
+count_sub <- data$Count[11:24]
+case_sub <- data$Cases[11:24]
+lm_reg2 <- lm(count_sub ~ case_sub)
+summary(lm_reg2)
+```
+
+&nbsp;
+
+**Count of Covid Cases vs Negative Tweets Subset**
+```{r, echo=FALSE}
+ggplot() +
+  geom_line(aes(x = month_sub, y = count_sub, colour = "Negative Tweets")) +
+  geom_line(aes(x = month_sub, y = case_sub, colour = "Cases")) +
+  xlab("Month (1/20 - 12/21)") +
+  ylab("Count")
+```
+
+&nbsp;
+
+- Next, we ran a logistic regression model to see if there was a relationship between the count of negative sentiment Tweets and whether or not there were COVID restrictions in place. Restriction status was determined by societal restrictions in the United States and Europe. This logistic regression resulted in a p-value of 0.0101, indicating a significant correlation between the count of negative tweets and Covid restrictions. 
+
+&nbsp;
+
+### Negative Tweets vs Covid Restrictions Logistic Regression
+```{r, echo=FALSE}
+log_reg <- glm(data$Count ~ data$Restrctions)
+summary(log_reg)
+```
+
+&nbsp;
+
+- Lastly, we graphed the distributions of negative sentiment Tweets according to restriction status and were able to visualize the relationship between the two variables.
+
+&nbsp;
+
+**Distribution of Negative Tweets by Restriction Status**
+```{r, echo=FALSE}
+ggplot(data, aes(x = Restrctions, y = Count)) +
+  geom_boxplot(aes(y = Count, colour = Restrctions))
+```
+
+- From the above graphs we can see that the number of negative tweets had a stronger overall relationship with societal restrictions than with number of Covid cases, suggesting that the hindrance of social liberties has a more profound effect on humans than the knowledge of millions of people contracting Covid.
+
+&nbsp;
+
+### Sentiment Analysis Over Time
+
+- Next, we considered all sentiments’ Tweet count and ratios for each of the three years by producing several time series graphs.
+
+&nbsp;
+
+```{r}
+knitr::include_graphics("Total_Tweets_Per_Day_and_Ratio.jpeg")
+```
+
+&nbsp;
+
+- We noticed the counts of negative and neutral Tweets were higher, with the peak of negativity coming around July 2020 amidst the first summer of the pandemic.  As a result, we decided to consider how these negative Tweets compared year to year. We produced a time series plot indexed by year. While incomplete for several months in 2022, we notice a gradual increase in the total number of negative Tweets for 2020, as well as the cyclic pattern illustrated in 2021 and partially in 2022.
+
+&nbsp;
+
+
+```{r}
+knitr::include_graphics("neg_count_ratio.jpeg")
+```
+
+&nbsp;
+
+### Hashtag Trend Analysis
+
+- After delving into the trends of Tweet sentiment, we wanted to consider hashtag use.
+
+- The evolution of the use of COVID related hashtags all follow the same rise and constant use throughout the course of the pandemic.
+
+&nbsp;
+
+```{r}
+knitr::include_graphics("hashtag_series.jpeg")
+```
+
+&nbsp;
+
+- Next, we found the 20 most commonly used hashtags in 2022 and made a barplot of these hashtags against their frequency.
+
+&nbsp;
+
+**Most Popular Hashtags 2022**
+```{r}
+knitr::include_graphics("hashtag.png")
+```
+
+&nbsp;
+
+- As we anticipated, #covid was the most commonly used hashtag in 2022 and was presented as a strong outlier.  Because of the #covid outlier skewing our graph, we decided to remove it in order to get a stronger visualization of the remaining 19 most commonly used hashtags in 2022 thus far.
+
+&nbsp;
+
+```{r}
+knitr::include_graphics("hashtag_without_covid.png")
+```
+
+&nbsp;
+
+- Removing the #covid outlier gave us a stronger sense of how often the remaining 19 hashtags were used.  However, arguably 11 of the 20 hashtags were pertaining to the COVID-19 pandemic.
+
+&nbsp;
+
+# **Job Description**
+
+- Our jobs typically took around 5-10 minutes to complete, but drastically increased to about an hour or more as more individuals ran their computations on Slurm. We were able to use the default 4 GB of memory per CPU allocated on the Slurm scheduler for all of our jobs.
+- From our analysis, we learned a significant amount about Tweet Sentiment and Hashtags during the COVID-19 pandemic.  However, there certainly are weaknesses to our analysis. For example, we are putting trust in the sentiment analysis and prediction methods the creators of the dataset chose. While the algorithm has a good reputation, we did not perform the deep learning predictive computations ourselves and are putting trust into someone else’s work for our analysis which may result in problems rolling over.
+
+
+
+# **Conclusion**
+
+- In light of our analysis, we learned that there is a significant relationship between negative Tweets and the count of COVID cases specifically from November 2020 to December 2021. We also learned the relationship between number of negative Tweets and restriction status was significant. From the time series, the high count and ratios of negative and neutral Tweets on the Twitter platform remained consistent each year. We found that #covid was the most common hashtag of 2022 thus far, and was a strong outlier compared to other common hashtags. In future work, we might find it interesting to focus on a subset in time like the events occurring in Ukraine, the Olympics, or even the Superbowl.
+
+
+
+<div class="tocify-extend-page" data-unique="tocify-extend-page" style="height: 0;"></div>
+
