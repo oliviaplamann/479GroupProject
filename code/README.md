@@ -63,5 +63,7 @@
   - Produces statistical analysis and summary graphs
 - Run hashtag.R
   - Creates graphs for best hashtags for each year
-- Run time_series_sentiment.R
+- Run time series sentiment.R
   - Creates sentiment graphs for time series based on day file produced by combine_days.r
+- Run timeserieshashtag.R
+  - Creates hashtag time series graphs based on hashtag file produced by sp.sh
