@@ -189,7 +189,7 @@ knitr::include_graphics("hashtag_without_covid.png")
 
 # **Conclusion**
 
-- In light of our analysis, we learned that there is a significant relationship between negative Tweets and the count of COVID cases specifically from November 2020 to December 2021. We also learned the relationship between number of negative Tweets and restriction status was significant. From the time series, the high count and ratios of negative and neutral Tweets on the Twitter platform remained consistent each year. We found that #covid was the most common hashtag of 2022 thus far, and was a strong outlier compared to other common hashtags. In future work, we might find it interesting to focus on a subset in time like the events occurring in Ukraine, the Olympics, or even the Superbowl.
+- In light of our analysis, we learned that there is a significant relationship between negative Tweets and the count of COVID cases specifically from November 2020 to December 2021. We also learned the relationship between number of negative Tweets and restriction status was significant. From the time series, the high count and ratios of negative and neutral Tweets on the Twitter platform remained consistent each year. We found that #covid was the most common hashtag of 2022 thus far, and was a strong outlier compared to other common hashtags. In future work, we might find it interesting to focus on a subset in time like the events occurring in Ukraine, the Olympics, or even the Super Bowl.
 
 
 
