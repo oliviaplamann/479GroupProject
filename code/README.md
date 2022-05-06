@@ -1,5 +1,7 @@
 # This folder contains the code used to obtain our data and process it
 ## Here are directions for how to reproduce our analysis:
+### Folder
+- Untar the projectHPC folder to get a directory with all the below files
 ### Code to Read in the Data
 - Run submit_hashtag.sh:
   - Runs read_hashtag_2022.sh 
